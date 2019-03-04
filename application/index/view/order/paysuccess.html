@@ -1,0 +1,21 @@
+<script type="text/javascript" src="__STATIC__/index/js/n_nav.js"></script>
+{include file='public/top'}
+<!--End Menu End--> 
+<div class="i_bg">
+    <div class="content mar_20">
+    	<div class="warning">        	
+            <table border="0" style="width:1000px; text-align:center;" cellspacing="0" cellpadding="0">
+              <tr height="35">
+                <td style="font-size:18px;">
+                    感谢您在本店购物！您已经付款成功，请记住您的订单号: <font color="#ff4e00">{$orderInfo.order_number}</font>
+                    您的付款金额为: <font color="#ff4e00">{$orderInfo.order_amount}</font>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                	<a href="{:url('Index/index')}">首页</a> &nbsp; &nbsp; <a href="{:url('Member/member')}">用户中心</a>
+                </td>
+              </tr>
+            </table>        	
+        </div>
+    </div>

@@ -1,0 +1,153 @@
+{include file='public/user_top'/}
+<!--End Header End--> 
+<div class="i_bg bg_color">
+    <!--Begin 用户中心 Begin -->
+	<div class="m_content">
+        {include file='public/user_left'/}
+		<div class="m_right">
+            <p></p>
+            <div class="mem_tit">修改收货地址</div>
+            <table border="0" class="add_tab" style="width:930px;"  cellspacing="0" cellpadding="0">
+              <tr>
+                <td width="135" align="right">配送地区</td>
+                <td colspan="3" style="font-family:'宋体';">
+                	<select  name="province" class="area" id="province">
+                      <option value="0" select="selected">请选择...</option>
+                      {foreach $provinceInfo as $v}<option value="{$v.id}" {if condition="$v['id'] eq $addressInfo['province']"} selected {/if}>{$v.name}</option> {/foreach}
+                    </select>
+                    <select  name="city" class="area" id="city">
+                        <option value="0" select="selected" >请选择...</option>
+                        {foreach $city as $v}<option value="{$v.id}" {if condition="$v['id'] eq $addressInfo['city']"} selected {/if}>{$v.name}</option> {/foreach}
+                    </select> 
+                    <select  name="district" class="area" id="district">
+                        <option value="0" select="selected" >请选择...</option>
+                        {foreach $district as $v}<option value="{$v.id}" {if condition="$v['id'] eq $addressInfo['district']"} selected {/if}>{$v.name}</option> {/foreach}
+                    </select>
+                    （必填）
+                </td>
+              </tr>
+              <tr>
+                <td align="right">收货人姓名</td>
+                <td style="font-family:'宋体';"><input type="text" value="{$addressInfo.address_man}" name="address_man" class="add_ipt" id='name' />（必填）</td>
+              </tr>
+              <tr>
+                <td align="right">详细地址</td>
+                <td style="font-family:'宋体';"><input type="text" name="detailed_address" value="{$addressInfo.detailed_address}" class="add_ipt" id='address' />（必填）</td>
+              </tr>
+              <tr>
+                <td align="right">手机</td>
+                <td style="font-family:'宋体';"><input type="text" name="address_tel" value="{$addressInfo.address_tel}" class="add_ipt" id='tel' />（必填）</td>
+              </tr>
+            </tr>
+                <td align="right">最佳送货时间</td>
+                <td style="font-family:'宋体';"><input type="text"  name="send_time" class="add_ipt" value="{$addressInfo.send_time}" id='send_time' /></td>
+              </tr>
+              <tr>
+                  <td colspan="4"><input type="checkbox"  value="1" id="is_default" {if condition="$addressInfo['is_default'] eq 1"}checked{/if} >是否设置为默认地址</td>
+              </tr>
+              <input type="hidden" id="id" value="{$addressInfo.id}">
+             
+            </table>
+           	<p align="right">
+            	 <a href="#" class="add_b" id='btn' >修改</a>
+            </p> 
+           
+
+            
+        </div>
+    </div>
+    <!--End 用户中心 End--> 
+    <script>
+      $(function(){
+          layui.use(['form','layer'],function(){
+              var form=layui.form
+              var layer=layui.layer
+              //3级联动
+             $(".area").change(function(){
+                 var _this=$(this);
+                 _this.nextAll('select').html("<option value='0'>请选择...</option>")
+                 var id=_this.val();
+                 $.post(
+                     "{:url('Member_address/getArea')}",
+                     {id:id},
+                     function(result){
+                        var _option="<option value='0'>请选择...</option>"
+                        for(var i in result){
+                           _option+="<option value='"+result[i]['id']+"'>"+result[i]['name']+"</option>"
+                        }
+                        _this.next("select").html(_option);
+                        
+                     },
+                     'json'
+
+                 )
+                 
+             })
+              //修改
+             $("#btn").click(function(){
+                 
+                var province=$("#province").val()
+                 var city=$("#city").val()
+                 var district=$('#district').val()
+                 var name=$("#name").val()
+                 var address=$("#address").val()
+                 var tel=$('#tel').val()
+                 var send_time=$("#send_time").val();
+                 var is_default=$("#is_default").prop('checked');
+                 var id=$("#id").val()
+                 if(is_default){
+                     is_default=1
+                 }else{
+                     is_default=2
+                 }
+                 /* if(province==0){
+                     layer.msg("省份不能为空",{icon:2})
+                     return false
+                 }
+                 if(city==0){
+                     layer.msg("城市不能为空",{icon:2})
+                     return false
+                 }
+                 if(district==0){
+                     layer.msg("区/县不能为空",{icon:2})
+                     return false
+                 }
+                 if(name==""){
+                    layer.msg("收货人姓名不能为空",{icon:2})
+                     return false
+                 }
+                 if(address==""){
+                    layer.msg("详细地址不能为空",{icon:2})
+                     return false
+                 }
+                 if(tel==""){
+                    layer.msg("手机号不能为空",{icon:2})
+                     return false
+                 }else{
+                    var preg=/^1[3-9]\d{9}$/
+                    if(!preg.test(tel)){
+                        layer.msg("请输入正确的手机号",{icon:2})
+                        return false
+                    }
+
+                 }  */
+                $.post(
+                   "{:url('Member_address/addressupdate')}",
+                   {province:province,city:city,district:district,address_man:name,detailed_address:address,address_tel:tel,send_time:send_time,is_default:is_default,id:id},
+                   function(result){
+                       layer.msg(result.font,{icon:result.code})
+                      if(result.code==1){
+                          location.href="{:url('Member_address/address')}"
+                      }
+                   }
+                   ,'json'
+
+                )
+               
+             })
+            
+            
+          })
+      })
+    
+    </script>

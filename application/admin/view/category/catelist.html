@@ -1,0 +1,176 @@
+<div style="padding: 15px; width:900px">
+    <table class="layui-table">
+        <thead>
+          <tr>
+            <th>分类ID</th>
+            <th>分类名称</th>
+            <th>是否展示</th>
+            <th>是否在导航栏展示</th>
+            <th>添加时间</th>
+            <th>操作</th>
+          </tr> 
+        </thead>
+        <tbody  >
+          {foreach $info as $v}
+          <tr pid="{$v.pid}" cate_id="{$v.cate_id}">
+            <td> 
+              {:str_repeat('&nbsp;&nbsp',$v['level']*3)}
+              <a href="javascript:;" class="flag">+</a>
+              {$v.cate_id}
+            </td>
+            <td>
+              {:str_repeat('&nbsp;&nbsp',$v['level']*3)}
+              <span class="span_test">{$v.cate_name}</span>
+              <input type="text" class="inp" field="cate_name" value="{$v.cate_name}" style=" width:120px; display:none" >
+            </td>
+            <td class="show" status="{$v.is_show}" field="is_show" style="cursor: pointer;">
+                 {if condition="$v['is_show'] eq 1"}
+                 √
+                 {else /}
+                   ×
+                 {/if}
+            </td>
+            <td class="show" status="{$v.is_navshow}" field="is_navshow" style="cursor: pointer;">
+                {if condition="$v['is_navshow'] eq 1"}
+                 √
+                 {else /}
+                   ×
+                 {/if}
+            </td>
+
+            <td>{$v.create_time}</td>
+            <td><a href="javascript:;"   class="del">删除</a> 
+              <a href="{:url('category/cateUpdate')}?cate_id={$v.cate_id}">修改</a>
+            </td>
+          </tr>
+          {/foreach}
+        
+        </tbody>
+      </table>
+</div>
+<script>
+    $(function(){
+         layui.use(['form','layer'],function(){
+            var form=layui.form
+            var layer=layui.layer
+            $("tbody>tr[pid!=0]").hide() //将不是顶级的隐藏
+            $('.flag').click(function(){
+            var _this=$(this);
+            var flag=_this.text(); 
+            var cate_id=_this.parents('tr').attr('cate_id');  //当前分类的id
+            if(flag=="+"){
+              //展示
+               //当前分类的子类
+               var son=$("tbody>tr[pid="+cate_id+"]")
+               if(son.length>0){
+                  son.show()
+                  _this.text("-")
+               }
+              
+            }else{
+               trHide(cate_id)
+              _this.text("+")
+               
+            }
+            //递归
+            function trHide(cate_id){
+                     var _tr=$("tbody>tr[pid="+cate_id+"]")//当前分类的子类
+                     _tr.find('td').find("a[class='flag']").text("+")
+                     _tr.hide()
+                     for(var i=0;i<_tr.length;i++){
+                         var c_id=_tr.eq(i).attr('cate_id')
+                         trHide(c_id)
+                     }
+            }
+           
+        })
+            //即点即改
+            //span标签隐藏 input显示
+           $(".span_test").click(function(){
+                 var _this=$(this);
+                 _this.hide();
+                 p= _this.next(".inp").val();
+                 _this.next(".inp").show().val("").focus().val(p);
+            })
+            //修改文本框的值
+           $(".inp").blur(function(){
+                var _this=$(this) //input
+                var value=_this.val() //值
+                var field=_this.attr('field') //字段
+                var cate_id=_this.parents('tr').attr('cate_id') //id
+                $.post(
+                  "{:url('Category/cateUpdateField')}",
+                  {value:value,field:field,cate_id:cate_id},
+                  function(result){
+                    layer.msg(result.font,{icon:result.code})
+                    if(result.code==1){
+                        _this.hide()
+                        _this.prev('span').html(value).show()
+                    }
+                  },
+                  'json'
+
+                )
+            })
+            //修改对错号的状态
+           $(".show").click(function(){
+               var _this=$(this);
+               var field=_this.attr('field')//字段
+               var status=_this.attr('status')//状态
+               var cate_id=_this.parent().attr("cate_id")//id
+               //处理状态
+               if(status==1){
+                 status=2
+               }else{
+                 status=1
+               }
+               $.post(
+                  "{:url('Category/cateUpdateField')}",
+                  {field:field,value:status,cate_id:cate_id},
+                  function(result){
+                    
+                     layer.msg(result.font,{icon:result.code})
+                    if(result.code==1){
+                         if(status==1){
+                           _this.text("√")
+                           _this.attr('status',1)
+                          
+                         }else{
+                           _this.text("×")
+                           _this.attr('status',2)
+                           
+                         }
+                    } 
+                    
+                  },
+                  'json'
+                 
+
+                )
+              
+           })
+           //删除
+           $(".del").click(function(){
+              var _this=$(this);
+              var cate_id=_this.parents("tr").attr("cate_id")
+              //console.log(cate_id);
+              $.post(
+                  "{:url('Category/cateDel')}",
+                  {cate_id:cate_id},
+                  function(result){
+                        layer.msg(result.font,{icon:result.code})
+                        if(result.code==1){
+                           _this.parents("tr").remove()
+                        }
+                  },
+                  'json'
+                )
+
+             })
+           //修改
+          
+        })
+                
+        
+    })
+</script>

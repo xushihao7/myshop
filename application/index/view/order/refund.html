@@ -1,0 +1,63 @@
+<!--End Menu End-->
+<script type="text/javascript" src="__STATIC__/index/js/n_nav.js"></script>
+{include file='public/top'}
+<div class="i_bg">
+    <div class="content mar_20">
+        <table  border="0" class="car_tab" style="width:1200px; margin-bottom:50px;" cellspacing="0" cellpadding="0">
+            <tr>
+                <td class="car_th" width="490">商品名称</td>
+                <td class="car_th" width="140">单价</td>
+                <td class="car_th" width="150">购买数量</td>
+                <td class="car_th" width="100">退款金额</td>
+                <td class="car_th" width="150">操作</td>
+            </tr>
+            {foreach $goodsInfo as $k=>$v}
+            <tr >
+                <input type="hidden" class="order_number" order_number="{$order_number}">
+                <td >
+                    <div class="c_s_img"><img src="__ROOT__/goods_img/{$v.goods_img}" width="73" height="73" /></div>
+                    {$v.goods_name}
+                </td>
+                <td align="center" >
+                    ￥<span >{$v.self_price}</span>
+                </td>
+                <td align="center" >
+                    {$v.buy_number}
+                </td>
+                <td align="center">{$v.buy_number * $v.self_price}</td>
+                <td align="center">
+                    <a href="javascript:;" self_price="{$v.self_price}" class="refund" order_id="{$v.order_id}" goods_id="{$v.goods_id}" buy_number="{$v.buy_number}" >
+                        退款
+                    </a>&nbsp; &nbsp;
+                </td>
+            </tr>
+            {/foreach}
+
+        </table>
+
+    </div>
+    <script>
+        $(function(){
+            layui.use(["layer"],function(){
+                $(".refund").click(function(){
+                    var _this=$(this);
+                    var order_number=$(".order_number").attr("order_number");
+                    var goods_id=_this.attr("goods_id");
+                    var buy_number=_this.attr("buy_number");
+                    var self_price=_this.attr("self_price")
+                    $.post(
+                        "{:url('Order/refund')}",
+                        {order_number:order_number,goods_id:goods_id,buy_number:buy_number,self_price:self_price},
+                        function(result){
+                            layer.msg(result.font,{icon:result.code})
+                        }
+                        ,'json'
+                    )
+
+
+                })
+            })
+        })
+    </script>
+
+

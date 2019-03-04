@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+       
+    </style>
+</head>
+<body>
+      <form action="{:url('Search/add')}" method="post">
+          <div>
+            <input type="text" name="content" id="_input"><input type="submit" value="搜索">
+          </div>
+          <div  id='div_test'>
+                          <div id="content"></div> 
+          </div>
+    </form>
+</body>
+</html>
+<script>
+   $(function(){
+       $("#div_test").hide()
+       $(document).on("click keyup",'#_input',function(){
+            var _this=$(this);
+            var value=_this.val();
+                $.post(
+               "{:url('Search/show')}",
+               {value:value},
+               function(arr){
+                 var str=""
+                 $.each(arr.arr,function(i,v){
+                     str+="<div id='content'>"+v.content+"</div>"
+                     $("#div_test").html(str);
+                 })  
+               },
+               'json'
+             )
+           $("#div_test").show()
+
+       })
+       $(document).on("click","#content",function(){
+           var _this=$(this);
+           var _content=_this.text();
+           var _input=_this.parents("#div_test").prev("div").children("#_input");
+           _input.val(_content)
+        
+       })
+       
+      
+   })
+</script>

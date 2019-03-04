@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html>
+
+	<head lang="en">
+		<meta charset="UTF-8">
+		<title>注册</title>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+		<meta name="format-detection" content="telephone=no">
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+		<link rel="stylesheet" href="__STATIC__/index/login/amazeui.css" />
+		<link href="__STATIC__/index/login/dlstyle.css" rel="stylesheet" type="text/css">
+		<link href="__STATIC__/layui/css/layui.css" rel="stylesheet" type="text/css">
+
+		<script src="__STATIC__/layui/layui.js"></script>
+		<script src="__STATIC__/index/login/jquery-3.2.1.min.js"></script>
+		<script src="__STATIC__/index/login/amazeui.min.js"></script>
+
+	</head>
+
+	<body>
+
+<div class="login-boxtitle">
+	<a href="home/demo.html"><img alt="" src="__STATIC__/index/login/logobig.png" /></a>
+</div>
+
+<div class="res-banner">
+	<div class="res-main">
+		<div class="login-banner-bg"><span></span><img src="__STATIC__/index/login/big.jpg" /></div>
+		<div class="login-box">
+
+<div class="am-tabs" id="doc-my-tabs">
+<ul class="am-tabs-nav am-nav am-nav-tabs am-nav-justify">
+	<li class="am-active"><a href="">邮箱注册</a></li>
+	<li><a href="">手机号注册</a></li>
+</ul>
+
+<div class="am-tabs-bd">
+	<!--邮箱注册-->
+	<div class="am-tab-panel am-active">
+	<form method="post" class="layui-form">
+
+	<div class="user-email">
+		<label for="email"><i class="am-icon-envelope-o"></i></label>
+		<input type="email" name="user_email"  id="email"  placeholder="请输入邮箱账号">
+	</div>
+	<div class="verification">
+		<label for="email_code"><i class="am-icon-code-fork"></i></label>
+		<input type="text" name="user_code" id="email_code"   placeholder="请输入验证码">
+		<a class="btn" href="javascript:void(0);"  id="sendEmailCode">
+			<span class="dyButton" id="span_email">获取</span>
+		</a>
+	</div>
+	<div class="user-pass">
+		<label for="email_pwd"><i class="am-icon-lock"></i></label>
+		<input type="password" name="user_pwd" id="email_pwd"  placeholder="设置密码">
+	</div>
+	<div class="user-pass">
+		<label for="email_pwd1"><i class="am-icon-lock"></i></label>
+		<input type="password" name="user_pwd1" id="email_pwd1"   placeholder="确认密码">
+	</div>
+	<div class="am-cf">
+		<input type="button" lay-submit lay-filter="emailDemo" value="注册" class="am-btn am-btn-primary am-btn-sm am-fl">
+	</div>
+	</form>
+
+
+
+
+	</div>
+		<!--手机号注册-->
+		<div class="am-tab-panel">
+			<form method="post" class="layui-form">
+				<div class="user-phone">
+					<label for="tel"><i class="am-icon-mobile-phone am-icon-md"></i></label>
+					<input type="tel" name="user_tel" lay-verifys="required|phone"  id="tel" placeholder="请输入手机号">
+				</div>
+				<div class="verification">
+					<label for="tel_code"><i class="am-icon-code-fork"></i></label>
+					<input type="tel" name="user_code" lay-verifys="required" id="tel_code" placeholder="请输入验证码">
+					<a class="btn" href="javascript:void(0);" id="sendTelCode">
+						<span class="dyButton" id="span_tel">获取</span>
+					</a>
+				</div>
+				<div class="user-pass">
+					<label for="tel_pwd"><i class="am-icon-lock"></i></label>
+					<input type="password" name="user_pwd" lay-verifys="required|checkpwd" id="tel_pwd" placeholder="设置密码">
+				</div>
+				<div class="user-pass">
+					<label for="tel_pwd1"><i class="am-icon-lock"></i></label>
+					<input type="password" name="user_pwd1" lay-verifys="required|checkpwd1" id="tel_pwd1" placeholder="确认密码">
+				</div>
+				<div class="am-cf">
+					<input type="button" lay-submit lay-filter="telDemo" value="注册" class="am-btn am-btn-primary am-btn-sm am-fl">
+				</div>
+			</form>
+
+		</div>
+						<script>
+							$(function() {
+								$('#doc-my-tabs').tabs();
+								})
+						</script>
+					</div>
+				</div>
+
+		</div>
+	</div>
+			
+			<div class="footer ">
+				<div class="footer-hd ">
+					<p>
+						<a href="# ">恒望科技</a>
+						<b>|</b>
+						<a href="{:url('Index/index')} ">商城首页</a>
+						<b>|</b>
+						<a href="# ">支付宝</a>
+						<b>|</b>
+						<a href="# ">物流</a>
+					</p>
+				</div>
+				<div class="footer-bd ">
+					<p>
+						<a href="# ">关于恒望</a>
+						<a href="# ">合作伙伴</a>
+						<a href="# ">联系我们</a>
+						<a href="# ">网站地图</a>
+						<em>© 2015-2025 Hengwang.com 版权所有. 更多模板 <a href="http://www.cssmoban.com/" target="_blank" title="模板之家">模板之家</a> - Collect from <a href="http://www.cssmoban.com/" title="网页模板" target="_blank">网页模板</a></em>
+					</p>
+				</div>
+			</div>
+	</body>
+
+</html>
+<script>
+
+
+
+
+
+	$(function(){
+	    layui.use(['layer','form'],function(){
+	        var layer=layui.layer;
+	        var form=layui.form;
+			var s=30
+			//点击发送邮箱
+			$("#span_email").click(function(){
+			    var email= $("#email").val()
+				var preg=/^\w+@\w+\.com$/
+				if(email==""){
+					layer.msg('邮箱不能为空',{icon:2})
+				}else if(!preg.test(email)){
+					layer.msg("邮箱格式不正确",{icon:2})
+				}else{
+					
+					$.post(
+						"{:url('Login/sendEmail')}",
+						 {email:email},
+						 function(res){
+							 layer.msg(res.font,{icon:res.code})
+							 if(res.code==1){
+								$("#span_email").text(s+"s")
+					            _time=setInterval(emailTime,1000)
+							 }
+						 },
+						 'json'
+					)
+				}
+				
+			})
+			//点击发送手机号
+			$("#span_tel").click(function(){
+               var tel= $("#tel").val()
+			   var preg=/^1[3-9]\d{9}$/
+			  if(tel==""){
+				 layer.msg('手机号不能为空',{icon:2})
+			  }else if(!preg.test(tel)){
+				  layer.msg("请输入正确的手机号",{icon:2})
+			  }else{
+				 
+				  $.post(
+					  "{:url('Login/sendTel')}",
+					  {tel:tel},
+					  function(res){
+						console.log(res)
+						layer.msg(res.font,{icon:res.code})
+						if(res.code==1){
+							$("#span_tel").text(s+"s")
+				            _time=setInterval(telTime,1000)
+						}
+					  }
+					  ,'json'
+					  
+				  )  
+			  }
+
+			})
+            
+
+
+
+		    //邮箱秒数倒计时 
+			function emailTime(){
+				var second=parseInt($("#span_email").text()) //30s变成数值型
+				if(second==0){
+					$("#span_email").text("获取")
+					clearInterval(_time)
+					$("#span_email").css("pointer-events",'auto')
+				}else{
+					second=second-1
+					$("#span_email").text(second+"s")
+					$("#span_email").css("pointer-events",'none')
+				}
+			}
+			//手机秒数倒计时
+			function telTime(){
+				var second=parseInt($("#span_tel").text())
+				if(second==0){
+					$("#span_tel").text("获取")
+					clearInterval(_time)
+					$("#span_tel").css("pointer-events","auto")
+				}else{
+					second=second-1
+					$("#span_tel").text(second+"s")
+					$("#span_tel").css("pointer-events","none")
+				}
+			}
+            //验证
+			form.verify({
+				checkpwd: function(value, item){ //value：表单的值、item：表单的DOM对象
+				   var preg=/^.{6,16}$/
+				   if(!preg.test(value)){
+					   return "密码必须为6-16位"
+				   }
+				},
+				checkpwd1: function(value, item){ //value：表单的值、item：表单的DOM对象
+				  var pwd=$("#email_pwd").val()
+				  var tel=$("#tel_pwd").val()
+				  if(value==""){
+					  return "确认密码必须填"
+				  }else if(value!=pwd && value!=tel){
+					  return "确认密码必须和密码一致"
+				  }
+				}
+				
+				
+				
+			});      
+			
+			
+			
+			//监听邮箱提交
+			form.on('submit(emailDemo)', function(data){
+			     $.post(
+					"{:url('Login/register')}?type=1",
+					data.field,
+					function(result){
+						//console.log(result);
+						layer.msg(result.font,{icon:result.code});
+						if(result.code==1){
+							location.href="{:url('Index/index')}"
+						}
+						
+					},
+					'json'
+				) 
+			    return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
+			});
+			//监听手机提交
+			form.on('submit(telDemo)', function(data){
+			     $.post(
+					"{:url('Login/register')}?type=2",
+					data.field,
+					function(result){
+						layer.msg(result.font,{icon:result.code})
+						//console.log(result)
+						if(result.code==1){
+							location.href="{:url('Index/index')}"
+						}
+					}
+					,'json'
+					
+				) 
+			    return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
+			});
+
+
+
+
+
+		});
+
+	})
+</script>

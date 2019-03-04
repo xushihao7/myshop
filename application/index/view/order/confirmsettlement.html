@@ -1,0 +1,224 @@
+<script type="text/javascript" src="__STATIC__/index/js/n_nav.js"></script>
+{include file='public/top'}
+<!--End Menu End--> 
+<div class="i_bg">  
+    <div class="content mar_20">
+    	<img src="__STATIC__/index/images/img2.jpg" />        
+    </div>
+    
+    <!--Begin 第二步：确认订单信息 Begin -->
+    <div class="content mar_20">
+    	<div class="two_bg">
+        	<div class="two_t">
+            	<span class="fr"><a href="#">修改</a></span>商品列表
+            </div>
+            <table border="0" class="car_tab" style="width:1110px;" cellspacing="0" cellpadding="0">
+              <tr>
+                <td class="car_th" width="550">商品名称</td>
+                <td class="car_th" width="140">商品单价</td>
+                <td class="car_th" width="150">购买数量</td>
+                <td class="car_th" width="130">小计</td>
+                <td class="car_th" width="140">返还积分</td>
+              </tr>
+              {foreach $cartInfo as $k=>$v}
+              <tr>
+                <td>
+                    <div class="c_s_img"><img src="__ROOT__/goods_img/{$v.goods_img}" width="73" height="73" /></div>
+                    {$v.goods_name}
+                </td>
+                <td align="center">{$v.self_price}</td>
+                <td align="center">{$v.buy_number}</td>
+                <td align="center" style="color:#ff4e00;" class="subtotal">￥{$v.self_price*$v.buy_number}</td>
+                <td align="center" class="score">{$v.goods_score*$v.buy_number}R</td>
+              </tr>
+              {/foreach}
+              
+                <!-- <td colspan="5" align="right" style="font-family:'Microsoft YaHei';"  >
+                    商品总价：￥1899.00 ； 返还积分 56R  
+                </td> -->
+              </tr>
+            </table>
+            
+            <div class="two_t">
+            	<span class="fr"><a href="#">修改</a></span>收货人信息
+            </div>
+            <div style="overflow-y: auto;height: 200px" >
+            {foreach $addressInfo as $k=>$v} 
+            <table border="0" class="peo_tab"  style="width:1110px; margin-top: 15px" cellspacing="0" cellpadding="0">
+              <tr>
+                {if condition="$v['is_default'] eq 1"}
+                <td rowspan="2"><input type="radio" name="address_id" value="{$v.id}" checked></td>
+                {else/}
+                <td rowspan="2"><input type="radio" name="address_id" value="{$v.id}" ></td>
+                {/if}
+                <td class="p_td" width="160">收货人姓名</td>
+                <td width="395">{$v.address_man}</td>
+                <td class="p_td" width="160">收货人电话</td>
+                <td width="395">{$v.address_tel}</td>
+              </tr>
+              <tr>
+                <td class="p_td">省市区</td>
+                <td>{$v.province_name}{$v.city_name}{$v.district_name}</td>
+                <td class="p_td">详细地址</td>
+                <td>{$v.detailed_address}</td>
+              </tr>
+           
+            </table>
+            {/foreach}
+          </div>
+         
+
+            
+            <div class="two_t">
+            	配送方式
+            </div>
+            <table border="0" class="car_tab" style="width:1110px;" cellspacing="0" cellpadding="0">
+              <tr>
+                <td class="car_th" width="80"></td>
+                <td class="car_th" width="200">名称</td>
+                <td class="car_th" width="370">订购描述</td>
+                <td class="car_th" width="150">费用</td>
+                <td class="car_th" width="135">免费额度</td>
+                <td class="car_th" width="175">保价费用</td>
+              </tr>
+              <tr>
+              	<td align="center"><input type="checkbox" name="ch" checked="checked" /></td>
+                <td align="center" style="font-size:14px;"><b>申通快递</b></td>
+                <td>江、浙、沪地区首重为15元/KG，其他地区18元/KG，续重均为5-6元/KG， 云南地区为8元</td>
+                <td align="center">￥15.00</td>
+                <td align="center">￥0.00</td>
+                <td align="center">不支持保价</td>
+              </tr>
+              <tr>
+              	<td align="center"><input type="checkbox" name="ch" /></td>
+                <td align="center" style="font-size:14px;"><b>城际快递</b></td>
+                <td>运费固定</td>
+                <td align="center">￥15.00</td>
+                <td align="center">￥0.00</td>
+                <td align="center">不支持保价</td>
+              </tr>
+              <tr>
+              	<td align="center"><input type="checkbox" name="ch" /></td>
+                <td align="center" style="font-size:14px;"><b>邮局平邮</b></td>
+                <td>运费固定</td>
+                <td align="center">￥15.00</td>
+                <td align="center">￥0.00</td>
+                <td align="center">不支持保价</td>
+              </tr>
+              <tr>
+              	<td colspan="6">
+                	<span class="fr"><label class="r_rad"><input type="checkbox" name="baojia" /></label><label class="r_txt">配送是否需要保价</label></span>
+                </td>
+              </tr>
+            </table> 
+            
+            <div class="two_t">
+            	支付方式
+            </div>
+            <ul class="pay">
+                <li class="checked">支付宝<div class="ch_img"></div></li>
+                <li>货到付款<div class="ch_img"></div></li>
+                <li>银行卡转账<div class="ch_img"></div></li>
+            </ul>  
+            <div class="two_t">
+            	其他信息
+            </div>
+            <table border="0" class="car_tab" style="width:1110px;" cellspacing="0" cellpadding="0">
+              
+              <tr valign="top">
+                <td align="right" style="padding-right:0;"><b style="font-size:14px;">订单附言：</b></td>
+                <td style="padding-left:0;"><textarea class="add_txt" style="width:860px; height:50px;" id="orderMessage"></textarea></td>
+              </tr>
+
+             
+            </table>
+            
+    <table border="0" style="width:900px; margin-top:20px;" cellspacing="0" cellpadding="0">
+      <tr height="70">
+        <td align="right">
+          <b style="font-size:14px;">应付款金额：<span style="font-size:22px; color:#ff4e00;" id="pay_price">￥2899</span></b>
+        </td>
+      </tr>
+      <tr height="70">
+        <td align="right"><a href="javascript:;" id="confirmorder">
+          <img src="__STATIC__/index/images/btn_sure.gif" /></a></td>
+      </tr>
+      </table>
+
+            
+        	
+        </div>
+    </div>
+    <script>
+      $(function(){
+        layui.use(['layer'],function(){
+                    var total=0
+                    $(".subtotal").each(function(){
+                        total+=parseInt($(this).text().substr(1))
+                    })
+
+                    var score=0
+                    $(".score").each(function(){
+                        score+=parseInt($(this).text().substr(0,$(this).text().length-1))
+                    })
+                    $("#score").text(score+"R")
+                    $("#pay_price").text("￥"+total)
+                    $("#total").text("￥"+total);
+
+
+
+            $(".pay").find("li").click(function(){
+                var _this=$(this)
+                _this.siblings().removeClass("checked")
+                _this.addClass("checked")
+            })
+
+            //点击确认订单
+            $("#confirmorder").click(function(){
+                var cart_id="{:input('get.cart_id')}"
+                $(":radio").each(function(){
+                    if($(this).prop("checked")==true){
+                       id=$(this).val()
+                    }  
+                })
+              var type=$('.pay').find("li[class='checked']").index()+1
+              var orderMessage=$("#orderMessage").val()
+              var total=$("#pay_price").text().substr(1)
+            $.post(
+               "{:url('Order/confirmOrder')}",
+               {cart_id:cart_id,id:id,type:type,orderMessage:orderMessage},
+               function(result){
+                 layer.msg(result.font,{icon:result.code})
+                 if(result.code==1){
+                      location.href="{:url('Order/orderSuccess')}?order_id="+result.order_id
+                 }
+               }
+               ,'json'
+            )
+  
+            })
+
+
+
+
+
+
+
+        })
+          
+        
+           
+
+
+
+           
+           
+
+
+      })
+      
+      
+    
+    </script>
+	
+    

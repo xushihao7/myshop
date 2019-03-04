@@ -1,0 +1,103 @@
+<div style="padding: 15px; width:600px" >
+        <form class="layui-form" action="">
+            <div class="layui-form-item">
+              <label class="layui-form-label">角色名称</label>
+              <div class="layui-input-block">
+                <input type="text" name="role_name" required  lay-verifys="required" placeholder="请输入标题" autocomplete="off" class="layui-input">
+              </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label" >节点列表</label> 
+                <div class="layui-input-block">
+                {foreach $nodeInfo as $k=>$v}
+                <fieldset class="layui-elem-field">
+                    <legend><input type="checkbox" name="node_id[]" value="{$v.node_id}" title="{$v.node_name}" lay-skin="primary" lay-filter="all"></legend>
+                    <div class="layui-field-box">
+                       {foreach $v['son'] as $kk=>$vv}
+                        <input type="checkbox" name="node_id[]" value="{$vv.node_id}"  title="{$vv.node_name}" lay-skin="primary" lay-filter="box" >
+                        {/foreach}
+                    </div>
+                  </fieldset>
+                  {/foreach}
+                </div>
+               
+              </div>
+
+
+            
+            <div class="layui-form-item">
+              <div class="layui-input-block">
+                <button class="layui-btn" lay-submit lay-filter="*">立即提交</button>
+                <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+              </div>
+            </div>
+          </form>
+           
+        
+          </div>
+          <script>
+            $(function(){
+             
+
+
+                layui.use(['form','layer'],function(){
+                     var form=layui.form;
+                     var  layer=layui.layer;
+                //全选
+                form.on('checkbox(all)', function(data){
+                    var checked=data.elem.checked //是否被选中，true或者false 
+                    var _this= data.othis; //得到美化后的DOM对象
+                    if(checked==true){
+                      _this.parent().next().find("input").prop("checked",true)
+                    }else{
+                      _this.parent().next().find("input").prop("checked",false)
+                    }
+                    form.render(); //渲染表单
+                });  
+                //监听复选框
+                form.on('checkbox(box)', function(data){
+                    var checked=data.elem.checked //是否被选中，true或者false 
+                    var _this= data.othis; //得到美化后的DOM对象
+                    if(checked==true){
+                      _this.parent().prev().find("input").prop("checked",true)
+                      
+                    }else{
+                       var input=_this.siblings("input")
+                       var num=0
+                       input.each(function(index){
+                          var box=$(this).prop("checked")
+                          if(box==false){
+                             num+=1
+                          }
+                          if(num==input.length){
+                            _this.parent().prev().find("input").prop("checked",false)
+                          }
+                       })
+                        
+                    }
+                    form.render(); //渲染表单
+                });           
+
+                        
+                      
+                                       
+                  
+                   //表单提交
+                   form.on('submit(*)', function(data){
+                     //console.log(data.field) //当前容器的全部表单字段，名值对形式：{name: value}
+                     $.post(
+                      "{:url('Role/RoleAdd')}",
+                       data.field,
+                       function(result)
+                        {
+                         layer.msg(result.font,{icon:result.code})
+                       }
+                       
+                    )
+                       
+                      return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
+                    });
+        
+                })
+            })
+          </script>

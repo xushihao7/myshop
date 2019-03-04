@@ -1,0 +1,185 @@
+{include file='public/user_top'/}
+<!--End Header End--> 
+<div class="i_bg bg_color">
+    <!--Begin 用户中心 Begin -->
+	<div class="m_content">
+        {include file='public/user_left'/}
+		<div class="m_right">
+            <p></p>
+            <div class="mem_tit">收货地址</div>
+           <!--  判断是否是默认地址,默认加上边框 -->
+            {foreach $address as $k=>$v}
+            {if condition="$v['is_default'] eq 1" }
+            {assign  name="bcolor" value="border-color:red"}
+            {else/}
+            {assign name='bcolor' value=""} 
+            {/if}
+           
+
+            <div class="address" style="{$bcolor}">
+            	<div class="a_close">
+                    <a href="javascript:;" class="del" address_id="{$v.id}"><img src="__STATIC__/index/images/a_close.png" /></a>
+                </div>
+            	<table border="0" class="add_t" align="center" style="width:98%; margin:10px auto; font-size: 13px" cellspacing="0" cellpadding="0" >
+                  <tr>
+                    <td align="right" width="80">收货人姓名：</td>
+                    <td>{$v.address_man}</td>
+                  </tr>
+                  <tr>
+                    <td align="right">配送区域：</td>
+                    <td>{$v.address}</td>
+                  </tr>
+                  <tr>
+                    <td align="right">详细地址：</td>
+                    <td>{$v.detailed_address}</td>
+                  </tr>
+                  <tr>
+                    <td align="right">手机：</td>
+                    <td>{$v.address_tel}</td>
+                  </tr>
+                  <tr>
+                    <td align="right">最佳配送时间</td>
+                    <td>{$v.send_time}</td>
+                  </tr>
+                </table>
+                <p align="right">
+                	<a href="javascript:;" class='check' address_id="{$v.id}" style="color:#ff4e00;">设为默认</a>&nbsp; &nbsp; &nbsp; &nbsp; <a href="{:url('Member_address/addressupdate')}?id={$v.id}" style="color:#ff4e00;">编辑</a>&nbsp; &nbsp; &nbsp; &nbsp; 
+                </p>
+
+            </div>
+            {/foreach}
+
+            <div class="mem_tit">增加新的收货地址</div>
+            <table border="0" class="add_tab" style="width:930px;"  cellspacing="0" cellpadding="0">
+              <tr>
+                <td width="135" align="right">配送地区</td>
+                <td colspan="3" style="font-family:'宋体';">
+                	<select  name="province" class="area" id="province">
+                      <option value="0" select="selected">请选择...</option>
+                      {foreach $provinceInfo as $v}<option value="{$v.id}">{$v.name}</option> {/foreach}
+                    </select>
+                    <select  name="city" class="area" id="city"><option value="0" select="selected" >请选择...</option></select> 
+                    <select  name="district" class="area" id="district"><option value="0" select="selected" >请选择...</option></select>
+                    （必填）
+                </td>
+              </tr>
+              <tr>
+                <td align="right">收货人姓名</td>
+                <td style="font-family:'宋体';"><input type="text"  name="address_man" class="add_ipt" id='name' />（必填）</td>
+              </tr>
+              <tr>
+                <td align="right">详细地址</td>
+                <td style="font-family:'宋体';"><input type="text" name="detailed_address" class="add_ipt" id='address' />（必填）</td>
+              </tr>
+              <tr>
+                <td align="right">手机</td>
+                <td style="font-family:'宋体';"><input type="text" name="address_tel" class="add_ipt" id='tel' />（必填）</td>
+              </tr>
+            </tr>
+                <td align="right">最佳送货时间</td>
+                <td style="font-family:'宋体';"><input type="text"  name="send_time" class="add_ipt" id='send_time' /></td>
+              </tr>
+              <tr>
+                  <td colspan="4"><input type="checkbox"  value="1" id="is_default" >是否设置为默认地址</td>
+              </tr>
+             
+            </table>
+           	<p align="right">
+            	 <a href="#" class="add_b" id='btn'>添加</a>
+            </p> 
+           
+
+            
+        </div>
+    </div>
+    <!--End 用户中心 End--> 
+    <script>
+      $(function(){
+          layui.use(['form','layer'],function(){
+              var form=layui.form
+              var layer=layui.layer
+              //3级联动
+             $(".area").change(function(){
+                 var _this=$(this);
+                 _this.nextAll('select').html("<option value='0'>请选择...</option>")
+                 var id=_this.val();
+                 $.post(
+                     "{:url('Member_address/getArea')}",
+                     {id:id},
+                     function(result){
+                        var _option="<option value='0'>请选择...</option>"
+                        for(var i in result){
+                           _option+="<option value='"+result[i]['id']+"'>"+result[i]['name']+"</option>"
+                        }
+                        _this.next("select").html(_option);
+                        
+                     },
+                     'json'
+
+                 )
+                 
+             })
+              //添加
+             $("#btn").click(function(){
+                 var province=$("#province").val()
+                 var city=$("#city").val()
+                 var district=$('#district').val()
+                 var name=$("#name").val()
+                 var address=$("#address").val()
+                 var tel=$('#tel').val()
+                 var send_time=$("#send_time").val();
+                 var is_default=$("#is_default").prop('checked');
+                 if(is_default==true){
+                     is_default=1
+                 }else{
+                     is_default=2
+                 }
+                 $.post(
+                  "{:url('Member_address/address')}",
+                  {province:province,city:city,district:district,address_man:name,detailed_address:address,address_tel:tel,send_time:send_time,is_default:is_default},
+                  function(result){
+                      console.log(result);
+                       layer.msg(result.font,{icon:result.code})
+                     if(result.code==1){
+                         location.href="{:url('Member_address/address')}"
+                     } 
+                  }
+                  ,'json'
+                ) 
+             })
+             //删除
+             $(".del").click(function(){
+                 var _this=$(this);
+                 var id=_this.attr('address_id');
+                 $.post(
+                     "{:url('Member_address/addressDel')}",
+                     {id:id},
+                     function(result){
+                         layer.msg(result.font,{icon:result.code})
+                         if(result.code==1){
+                             _this.parents("div[class='address']").remove()
+                         }
+                     }
+                     ,'json'
+                 )
+             })
+             //设为默认
+             $(".check").click(function(){
+                 var  _this=$(this);
+                 var id=_this.attr("address_id");
+                $.post(
+                    "{:url('Member_address/changeCheck')}",
+                    {id:id},
+                    function(result){
+                       layer.msg(result.font,{icon:result.code})
+                       if(result.code==1){
+                           location.href="{:url('Member_address/address')}"
+                       }
+                    }
+                    ,'json'
+                )
+             })
+          })
+      })
+    
+    </script>

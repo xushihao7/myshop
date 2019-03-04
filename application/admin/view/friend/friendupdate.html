@@ -1,0 +1,78 @@
+<div style="padding: 15px; width:600px" >
+    <form class="layui-form" action="">
+        <input type="hidden" value="{$data.id}" name="id">
+      <div class="layui-form-item">
+        <label class="layui-form-label" >友链名称</label>
+        <div class="layui-input-block">
+          <input type="text" name="name" required value="{$data.name}" lay-verifys="required|checkName" placeholder="请输入标题" autocomplete="off" class="layui-input">
+        </div>
+      </div>
+      <div class="layui-form-item">
+        <label class="layui-form-label">友链网址</label>
+        <div class="layui-input-block">
+          <input type="text" name="url" required value="{$data.url}" lay-verifys="required|url" placeholder="请输入标题" autocomplete="off" class="layui-input">
+        </div>
+      </div>
+      <div class="layui-form-item">
+        <div class="layui-input-block">
+          <button class="layui-btn" lay-submit lay-filter="*">修改</button>
+          <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+        </div>
+      </div>
+    </form>
+    
+    </div>
+    <script>
+       $(function(){
+           layui.use(['form','layer'],function(){
+               var form=layui.form
+               var layer=layui.layer
+              
+               //验证
+               form.verify({ 
+                 
+                checkName:function(value, item){ 
+                  var font
+                   $.ajax({
+                      url:"{:url('Friend/checkName')}",
+                      method:'post',
+                      data:{name:value,type:1},
+                      async:false,
+                      success:function(result){
+                        //console.log(result)
+                         if(result=='0'){
+                             font='友情链接名称已存在'
+                          } 
+                      }
+
+                   })
+                   return font;
+                }
+               })
+              //监听表单提交
+              form.on('submit(*)', function(data){
+                $.post(
+                   "{:url('Friend/friendupdate')}",
+                   data.field,
+                   function(result){
+                    //console.log(result) 
+                      layer.msg(result.font, {icon:result.code});
+                      if(result.code==1){
+                         location.href="{:url('Friend/friendlist')}"
+                    }
+                    
+                     
+                   },
+                   'json'
+                   
+                   
+                 ) 
+                    return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
+                  }); 
+
+
+
+
+          })
+       })
+    </script>
